@@ -1,115 +1,151 @@
 <!-- from https://gist.github.com/RobTranquillo/8132191d48596dae68cef8e9cf48f812 -->
-
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-  <!-- we import arjs version without NFT but with marker + location based support -->
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-  <!-- this part defines the playback / control function and events -->
-  <script>
-    var markerFound = 0;
-    AFRAME.registerComponent('button', {
-        init: function ()
-        {
-          var elem = document.documentElement;
-          var marker_1 = document.querySelector("#marker1");
-          var fullbutton = document.querySelector("#fullscreen");
-          var Video_0 = document.querySelector("#Video_Asset_0");
-          var button_1 = document.querySelector("#mutebutton_1");
-          button1.hidden = true;
-          Video_0.pause();
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <!-- we import arjs version without NFT but with marker + location based support -->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <!-- this part defines the playback / control function and events -->
+    <script>
+        var markerFound = 0;
+        AFRAME.registerComponent('button', {
+            init: function ()
+            {
+                var elem = document.documentElement;
+                var marker_0 = document.querySelector("#marker_0");
+                var marker_1 = document.querySelector("#marker_1");
+                var fullbutton = document.querySelector("#fullscreen");
+                var Video_0 = document.querySelector("#Video_Asset_0");
+                var Video_1 = document.querySelector("#Video_Asset_1");
+                var button_0 = document.querySelector("#mutebutton_0");
+                var button_1 = document.querySelector("#mutebutton_1");
+                button_0.hidden = true;
+                button_1.hidden = true;
+                Video_0.pause();
+                Video_1.pause();
 
-          marker_1.addEventListener("markerFound", function (evt) {
-            markerFound = 1;
-            button_1.hidden = false;
-            // Video_0.play();  // if you want the video 
-            // to start immediently on marker detection, uncomment this
-          });
+                marker_0.addEventListener("markerFound", function (evt) {
+                    markerFound = 1;
+                    button_0.hidden = false;
+                    // Video_0.play();  // if you want the video
+                    // to start immediently on marker detection, uncomment this
+                });
 
-          marker_1.addEventListener("markerLost", function (evt) {
-            markerFound = 0;
-            Video_0.pause();
-            button_1.hidden = true;
-          });
+                marker_0.addEventListener("markerLost", function (evt) {
+                    markerFound = 0;
+                    Video_0.pause();
+                    button_0.hidden = true;
+                });
 
-          // button for video play/pause
-          button_1.addEventListener("click", function(evt){
-            console.log("button clicked")
-            if(Video_0.muted==true){
-              button_1.innerHTML="Pause Hiro";
-              Video_0.muted=false;
-              Video_0.play();
-            }else{
-              button_1.innerHTML="Play Hiro";
-              Video_0.muted=true;
-              Video_0.pause();
-            }
-          });
+                marker_1.addEventListener("markerFound", function (evt) {
+                    markerFound = 1;
+                    button_1.hidden = false;
+                    // Video_0.play();  // if you want the video
+                    // to start immediently on marker detection, uncomment this
+                });
 
-          // button for full screen
-          fullbutton.addEventListener("click",
-            function (evt){
-              if (fullscreen == 0) {
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen();
-                } else if (elem.mozRequestFullScreen) {
-                    /* Firefox */
-                    elem.mozRequestFullScreen();
-                } else if (elem.webkitRequestFullscreen) {
-                    /* Chrome, Safari and Opera */
-                    elem.webkitRequestFullscreen();
-                } else if (elem.msRequestFullscreen) {
-                    /* IE/Edge */
-                    elem.msRequestFullscreen();
+                marker_1.addEventListener("markerLost", function (evt) {
+                    markerFound = 0;
+                    Video_1.pause();
+                    button_1.hidden = true;
+                });
+
+                // button for video play/pause
+                button_0.addEventListener("click", function(evt){
+                    console.log("button clicked")
+                    if(Video_0.muted==true){
+                        button_0.innerHTML="Pause";
+                        Video_0.muted=false;
+                        Video_0.play();
+                    }else{
+                        button_0.innerHTML="Play";
+                        Video_0.muted=true;
+                        Video_0.pause();
+                    }
+                });
+
+                // button for video play/pause
+                button_1.addEventListener("click", function(evt){
+                    console.log("button clicked")
+                    if(Video_1.muted==true){
+                        button_1.innerHTML="Pause";
+                        Video_1.muted=false;
+                        Video_1.play();
+                    }else{
+                        button_1.innerHTML="Play";
+                        Video_1.muted=true;
+                        Video_1.pause();
+                    }
+                });
+
+                // button for full screen
+                fullbutton.addEventListener("click",
+                    function (evt){
+                        if (fullscreen == 0) {
+                            if (elem.requestFullscreen) {
+                                elem.requestFullscreen();
+                            } else if (elem.mozRequestFullScreen) {
+                                /* Firefox */
+                                elem.mozRequestFullScreen();
+                            } else if (elem.webkitRequestFullscreen) {
+                                /* Chrome, Safari and Opera */
+                                elem.webkitRequestFullscreen();
+                            } else if (elem.msRequestFullscreen) {
+                                /* IE/Edge */
+                                elem.msRequestFullscreen();
+                            }
+                            fullbutton.setAttribute("src", "./assets/exit_fullscreen.png");
+                            fullscreen = 1;
+                        } else {
+                            if (document.exitFullscreen) {
+                                document.exitFullscreen();
+                            } else if (document.webkitExitFullscreen) {
+                                document.webkitExitFullscreen();
+                            } else if (document.mozCancelFullScreen) {
+                                document.mozCancelFullScreen();
+                            } else if (document.msExitFullscreen) {
+                                document.msExitFullscreen();
+                            }
+                            fullbutton.setAttribute("src", "./assets/fullscreen.png");
+                            fullscreen = 0;
+                        }
+                    });
+            },
+            tick: function (totalTime, deltaTime)
+            {
+                var dTime = deltaTime / 1000;
+                if (markerFound == 1) {
                 }
-                fullbutton.setAttribute("src", "assets/exit_fullscreen.png");
-                fullscreen = 1;
-              } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                }
-                fullbutton.setAttribute("src", "assets/fullscreen.png");
-                fullscreen = 0;
-              }
-            });
-        },
-        tick: function (totalTime, deltaTime)
-        {
-            var dTime = deltaTime / 1000;
-            if (markerFound == 1) {
             }
-        }
-      });
-  </script>
+        });
+    </script>
 </head>
 <body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
-  <div style='position: absolute; bottom: 10px; right: 30px; width:100%; text-align: center; z-index: 1;'>
+<div style='position: absolute; bottom: 10px; right: 30px; width:100%; text-align: center; z-index: 1;'>
     <button id="mutebutton_1" style='position: absolute; bottom: 10px' hidden>Play</button>
-  </div>
-  <div style='position: absolute; bottom: 5px; left: 30px; width:100%; text-align: right; z-index: 1;'>
+</div>
+<div style='position: absolute; bottom: 10px; right: 80px; width:100%; text-align: center; z-index: 1;'>
+    <button id="mutebutton_0" style='position: absolute; bottom: 10px' hidden>Play</button>
+</div>
+<div style='position: absolute; bottom: 5px; left: 30px; width:100%; text-align: right; z-index: 1;'>
     <input type="image" id="fullscreen" src="assets/fullscreen.png" style='position: absolute; bottom: 0px; right: 35px;'></input>
-  </div>
-  <a-scene embedded arjs="debugUIEnabled: false; sourceType: webcam" vr-mode-ui="enabled: false">
+</div>
+<a-scene embedded arjs="debugUIEnabled: false; sourceType: webcam" vr-mode-ui="enabled: false">
     <a-entity id="mouseCursor" cursor="rayOrigin: mouse" raycaster="objects: .intersectable; useWorldCoordinates: true;"></a-entity>
     <a-assets>
-      <video id="Video_Asset_0" autoplay="false" loop crossorigin="anonymous" src="assets/video2.mp4" webkit-playsinline playsinline controls muted></video>
-	 
+        <video id="Video_Asset_0" autoplay="false" loop crossorigin="anonymous" src="assets/video.mp4" webkit-playsinline playsinline controls muted></video>
     </a-assets>
-	
-    <a-marker id="marker_1" preset="hiro" emitevents="true" button>
-      <a-video src="#Video_Asset_0" id="Video_0" class="intersectable" width="16" height="9" position="0 1 0" scale="0.2 0.2 0.2" rotation="0 0 0" color="#FFFFFF" transparent=False></a-video>
+    <a-assets>
+        <video id="Video_Asset_1" autoplay="false" loop crossorigin="anonymous" src="assets/video2.mp4" webkit-playsinline playsinline controls muted></video>
+    </a-assets>
+    <a-marker id="marker_0" preset="hiro" emitevents="true" button>
+        <a-video src="#Video_Asset_0" id="Video_0" class="intersectable" width="1" height="1" position="0 0 0" rotation="-90 0 0" color="#FFFFFF" transparent=False></a-video>
     </a-marker>
-	
-	
-	
+    <!-- handle kanji marker -->
+    <a-marker id="marker_1" preset='kanji' emitevents="true" button>
+        <a-video src="#Video_Asset_1" id="Video_1" class="intersectable" width="1" height="1" position="0 0 0" rotation="-90 0 0" color="#FFFFFF" transparent=False></a-video>
+    </a-marker>
     <a-entity camera></a-entity>
-  </a-scene>
+</a-scene>
 </body>
 </html>
