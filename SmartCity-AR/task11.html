@@ -14,11 +14,15 @@
         {
           var elem = document.documentElement;
           var marker = document.querySelector("#marker");
+          var marker1 = document.querySelector("#marker1");
           var fullbutton = document.querySelector("#fullscreen");
           var Video_0 = document.querySelector("#Video_Asset_0");
+          var Video_1 = document.querySelector("#Video_Asset_1");
           var button = document.querySelector("#mutebutton");
+          var button1 = document.querySelector("#mutebutton1");
           button.hidden = true;
           Video_0.pause();
+          Video_1.pause();
 
           marker.addEventListener("markerFound", function (evt) {
             markerFound = 1;
@@ -32,7 +36,20 @@
             Video_0.pause();
             button.hidden = true;
           });
+          
+           marker1.addEventListener("markerFound", function (evt) {
+            markerFound = 1;
+            button1.hidden = false;
+            // Video_0.play();  // if you want the video 
+            // to start immediently on marker detection, uncomment this
+          });
 
+          marker1.addEventListener("markerLost", function (evt) {
+            markerFound = 0;
+            Video_1.pause();
+            button1.hidden = true;
+          });
+          
           // button for video play/pause
           button.addEventListener("click", function(evt){
             console.log("button clicked")
@@ -44,6 +61,19 @@
               button.innerHTML="Play";
               Video_0.muted=true;
               Video_0.pause();
+            }
+          });
+          
+          button1.addEventListener("click", function(evt){
+            console.log("button clicked")
+            if(Video_1.muted==true){
+              button.innerHTML="Pause";
+              Video_1.muted=false;
+              Video_1.play();
+            }else{
+              button.innerHTML="Play";
+              Video_1.muted=true;
+              Video_1.pause();
             }
           });
 
@@ -99,10 +129,14 @@
   <a-scene embedded arjs="debugUIEnabled: false; sourceType: webcam" vr-mode-ui="enabled: false">
     <a-entity id="mouseCursor" cursor="rayOrigin: mouse" raycaster="objects: .intersectable; useWorldCoordinates: true;"></a-entity>
     <a-assets>
-      <video id="Video_Asset_0" autoplay="false" loop crossorigin="anonymous" src="assets/video2.mp4" webkit-playsinline playsinline controls muted></video>
+      <video id="Video_Asset_0" autoplay="false" loop crossorigin="anonymous" src="assets/video.mp4" webkit-playsinline playsinline controls muted></video>
+      <video id="Video_Asset_1" autoplay="false" loop crossorigin="anonymous" src="assets/video2.mp4" webkit-playsinline playsinline controls muted></video>
     </a-assets>
     <a-marker id="marker" preset="hiro" emitevents="true" button>
       <a-video src="#Video_Asset_0" id="Video_0" class="intersectable" width="1" height="1" position="0 0 0" rotation="-90 0 0" color="#FFFFFF" transparent=False></a-video>
+    </a-marker>
+    <a-marker id="marker1" preset="kanji" emitevents="true" button>
+      <a-video src="#Video_Asset_1" id="Video_1" class="intersectable" width="1" height="1" position="0 0 0" rotation="-90 0 0" color="#FFFFFF" transparent=False></a-video>
     </a-marker>
     <a-entity camera></a-entity>
   </a-scene>
